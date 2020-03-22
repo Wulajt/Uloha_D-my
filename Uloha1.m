@@ -1,41 +1,39 @@
 clear;
 close;
 
-S = [ones(1,8);8*ones(1,8)]; 
-X = round(genrpop(30,S));
+generacie = 2000;
 v = [3 2 1];
-generacie = 5000;
-
-Y = [];
-
-for gen = 0:1:generacie
-    fitness = fit(X);
-    selb = selbest(X, fitness, v);
-    Y = [Y fit(selbest(X, fitness, [1]))];
-    Y1 = selbest(X, fitness, [1]);
-    selt = seltourn(X, fitness, 45);
-    selt = crossov(selt, 4, 0);
-    selt = mutx(selt,0.7,S);
-    X = [selb; selt];
-    X = round(X);
-end
-
-Y1
+Amp = [4 4 4 4 4 4 4 4];
 g = 0:1:generacie;
+nums = [4 4 4 2 2 2 2 2 2];
+
 figure()
-plot(g,Y)
+hold on
 
-
-obraz = zeros(8,8);
-for l = 1:8
-    pom= 9 - l;
-    for p = 1:8
-        if Y1(p) == l
-            obraz (pom, p) = 1;
-        end
+for ble = 0:5
+    Y = [];
+    X = [];
+    S = [ones(1,8);8*ones(1,8)]; 
+    X = round(genrpop(60,S));
+    X = round(X);
+    
+    for gen = 0:1:generacie
+        fitness = fit(X);
+        selb = selbest(X, fitness, v);
+        Y = [Y fit(selbest(X, fitness, [1]))];
+        Y1 = selbest(X, fitness, [1]);
+        seld = seldiv(X, fitness,nums, 0);
+        selt = seltourn(X, fitness, 30);
+        selA = [selt; seld];
+        selA = crossov(selA, 4, 0);
+        selA = mutx(selA,0.7,S);
+        %selA = muta(selA,0.7,Amp,S);
+        X = [selb; selA];
+        X = round(X);
     end
+    
+    Y1
+    plot(g,Y)
 end
-
-%obraz
-chessBoard(Y1)
+%chessBoard(Y1)
             
