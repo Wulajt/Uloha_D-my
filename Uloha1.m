@@ -1,16 +1,63 @@
 clear;
 close;
 
+Y1 = [];
+Y2 = [];
+
+isDiag = false; % false - Bez diagonaly, true - S diagonalou
+
 generacie = 2000;
-v = [3 2 1];
-Amp = [4 4 4 4 4 4 4 4];
 g = 0:1:generacie;
-nums = [4 4 4 2 2 2 2 2 2];
 
-figure()
-hold on
 
-for ble = 0:5
+v = [3 2 1];
+M = [];
+figure(1)
+for I = 1:10
+    Y = [];
+    X = [];
+    S = [ones(1,8);8*ones(1,8)]; 
+    X = round(genrpop(20,S));
+    X = round(X);
+    
+    for gen = 0:1:generacie
+        fitness = fit(X, isDiag);
+        selb = selbest(X, fitness, v);
+        TOP = selbest(X, fitness, [1]);
+        Y = [Y fit(TOP, isDiag)];
+        selt = seltourn(X, fitness, 14);
+        selt = crossov(selt, 4, 0);
+        selt = mutx(selt,0.3,S);
+        X = [selb; selt];
+        X = round(X);
+    end
+    
+    Y1 = [Y1; TOP];
+    subplot(2,1,1)
+    title('Score of all tries')
+    xlabel('Generation'); 
+    ylabel('Score');
+    hold on
+    plot(g,Y)
+    M = [M; Y];
+end
+m = mean(M);
+
+subplot(2,1,2)
+plot(g,m)
+title('Average score of all tries')
+xlabel('Generation'); 
+ylabel('Score');
+
+
+
+
+
+v = [5 3 2];
+M = [];
+figure(2)
+M = [];
+for I = 1:10
     Y = [];
     X = [];
     S = [ones(1,8);8*ones(1,8)]; 
@@ -18,22 +65,34 @@ for ble = 0:5
     X = round(X);
     
     for gen = 0:1:generacie
-        fitness = fit(X);
+        fitness = fit(X, isDiag);
         selb = selbest(X, fitness, v);
-        Y = [Y fit(selbest(X, fitness, [1]))];
-        Y1 = selbest(X, fitness, [1]);
-        seld = seldiv(X, fitness,nums, 0);
-        selt = seltourn(X, fitness, 30);
-        selA = [selt; seld];
-        selA = crossov(selA, 4, 0);
-        selA = mutx(selA,0.7,S);
-        %selA = muta(selA,0.7,Amp,S);
-        X = [selb; selA];
+        TOP = selbest(X, fitness, [1]);
+        Y = [Y fit(TOP, isDiag)];
+        selt = seltourn(X, fitness, 50);
+        selt = crossov(selt, 4, 0);
+        selt = mutx(selt,0.7,S);
+        X = [selb; selt];
         X = round(X);
     end
     
-    Y1
+    Y2 = [Y2; TOP];
+    subplot(2,1,1)
+    title('Score of all tries')
+    xlabel('Generation'); 
+    ylabel('Score');
+    hold on
     plot(g,Y)
+    M = [M; Y];
 end
-%chessBoard(Y1)
-            
+m = mean(M);
+
+subplot(2,1,2)
+plot(g,m)
+title('Average score of all tries')
+xlabel('Generation'); 
+ylabel('Score');
+
+
+chessBoard(Y1(1))
+chessBoard(Y2(1))            
