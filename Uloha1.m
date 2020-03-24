@@ -4,7 +4,7 @@ close;
 Y1 = [];
 Y2 = [];
 
-isDiag = false; % false - Bez diagonaly, true - S diagonalou
+isDiag = true; % false - Bez diagonaly, true - S diagonalou
 
 generacie = 2000;
 g = 0:1:generacie;
@@ -43,7 +43,7 @@ end
 m = mean(M); % priemerovanie score vsetkych pokusov na generaciu
 
 subplot(2,1,2)
-plot(g,m) % vykreslenie gracu premeru na generaciu vsetkych pokusov
+plot(g,m) % vykreslenie grafu priemeru na generaciu vsetkych pokusov
 title('Average score of all tries')
 xlabel('Generation'); 
 ylabel('Score');
@@ -92,5 +92,5 @@ xlabel('Generation');
 ylabel('Score');
 
 
-chessBoard(Y1(1))
-chessBoard(Y2(1))            
+chessBoard(Y1(1 , :))
+chessBoard(Y2(1 , :))            
